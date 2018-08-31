@@ -63,7 +63,7 @@ function display_product_interest_fields() {
 /**
  * Merge in our posted field data.
  *
- * @param  array  $data  The post data that comes by default.
+ * @param  array $data  The post data that comes by default.
  *
  * @return array  $data  The possibly modified posted data.
  */
@@ -85,10 +85,10 @@ function merge_product_interest_data( $data ) {
 	}
 
 	// Explode the string of IDs into an array..
-	$array  = explode( ',', sanitize_text_field( $_POST['woo-product-interest'] ) );
+	$array = explode( ',', sanitize_text_field( $_POST['woo-product-interest'] ) );
 
 	// Clean each entry.
-	$items  = array_map( 'absint', $array );
+	$items = array_map( 'absint', $array );
 
 	// Merge our opt-in items to the overall data array and return it.
 	return array_merge( $data, array( 'product-interest' => $items ) );
@@ -174,7 +174,7 @@ function update_customer_product_interest( $customer_id, $data ) {
 	}
 
 	// Filter out anything we're already signed up for.
-	$setup  = sanitize_filter_duplicate_signups( (array) $data['product-interest'], $customer_id );
+	$setup = sanitize_filter_duplicate_signups( (array) $data['product-interest'], $customer_id );
 
 	// If we have no items left, just bail.
 	if ( ! $setup ) {
@@ -210,7 +210,7 @@ function sanitize_filter_duplicate_signups( $product_ids = array(), $customer_id
 	}
 
 	// Get all the existing relationship data.
-	$existing   = Queries\get_products_for_customer( $customer_id, 'ids' );
+	$existing = Queries\get_products_for_customer( $customer_id, 'ids' );
 
 	// Bail with no data.
 	if ( ! $existing ) {
@@ -230,7 +230,7 @@ function sanitize_filter_duplicate_signups( $product_ids = array(), $customer_id
 	}
 
 	// Filter any duplicates that exist for some reason.
-	$product_ids    = array_unique( $product_ids );
+	$product_ids = array_unique( $product_ids );
 
 	// Return false if we unset everything or the IDs with the index reset.
 	return ! empty( $product_ids ) ? array_values( $product_ids ) : false;

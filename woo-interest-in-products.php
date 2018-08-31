@@ -21,7 +21,9 @@ namespace LiquidWeb\WooInterestInProducts;
 use WP_CLI;
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // Define our plugin version.
 define( __NAMESPACE__ . '\VERS', '0.0.1' );

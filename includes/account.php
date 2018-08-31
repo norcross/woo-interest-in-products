@@ -40,17 +40,18 @@ function load_endpoint_assets() {
 	$handle = 'woo-interest-in-products-front';
 
 	// Set a file suffix structure based on whether or not we want a minified version.
-	$file   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? 'woo-interest-in-products-front' : 'woo-interest-in-products-front.min';
+	$file = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? 'woo-interest-in-products-front' : 'woo-interest-in-products-front.min';
 
 	// Set a version for whether or not we're debugging.
-	$vers   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : Core\VERS;
+	$vers = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : Core\VERS;
 
 	// Load our CSS file.
 	wp_enqueue_style( $handle, Core\ASSETS_URL . '/css/' . $file . '.css', false, $vers, 'all' );
 
 	// And our JS.
 	wp_enqueue_script( $handle, Core\ASSETS_URL . '/js/' . $file . '.js', array( 'jquery' ), $vers, true );
-	wp_localize_script( $handle, 'wooProductInterest',
+	wp_localize_script(
+		$handle, 'wooProductInterest',
 		array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
 	);
 
@@ -91,10 +92,10 @@ function check_user_product_interest_changes() {
 	}
 
 	// Set my customer ID.
-	$customer_id    = absint( $_POST['wc_product_interest_customer_id'] );
+	$customer_id = absint( $_POST['wc_product_interest_customer_id'] );
 
 	// Determine my original IDs.
-	$original_ids   = ! empty( $_POST['wc_product_interest_original_ids'] ) ? explode( ',', sanitize_text_field( $_POST['wc_product_interest_original_ids'] ) ) : Queries\get_products_for_customer( $customer_id, 'relationship_id' );
+	$original_ids = ! empty( $_POST['wc_product_interest_original_ids'] ) ? explode( ',', sanitize_text_field( $_POST['wc_product_interest_original_ids'] ) ) : Queries\get_products_for_customer( $customer_id, 'relationship_id' );
 
 	// Check for the original IDs to exist.
 	if ( empty( $original_ids ) ) {
@@ -112,10 +113,10 @@ function check_user_product_interest_changes() {
 	}
 
 	// Set our new IDs as a separate variable for comparisons.
-	$interest_ids   = array_map( 'absint', $_POST['wc_product_interest_ids'] );
+	$interest_ids = array_map( 'absint', $_POST['wc_product_interest_ids'] );
 
 	// Check to see if we are matching.
-	$compare_ids    = Helpers\compare_id_arrays( $original_ids, $interest_ids );
+	$compare_ids = Helpers\compare_id_arrays( $original_ids, $interest_ids );
 
 	// If we have a matching set, just return nothing.
 	if ( false !== $compare_ids ) {
@@ -152,11 +153,14 @@ function check_user_product_interest_changes() {
 function redirect_account_page_action( $error_code = '', $success = 0, $args = array() ) {
 
 	// Set up our basic redirect args.
-	$basic  = array( 'success' => absint( $success ), 'woo-interest-in-products-action' => 1 );
-	$basic  = ! empty( $error_code ) ? wp_parse_args( $basic, array( 'errcode' => esc_attr( $error_code ) ) ) : $basic;
+	$basic = array(
+		'success'                         => absint( $success ),
+		'woo-interest-in-products-action' => 1,
+	);
+	$basic = ! empty( $error_code ) ? wp_parse_args( $basic, array( 'errcode' => esc_attr( $error_code ) ) ) : $basic;
 
 	// Merge the args we have.
-	$setup  = ! empty( $args ) ? wp_parse_args( $args, $basic ) : $basic;
+	$setup = ! empty( $args ) ? wp_parse_args( $args, $basic ) : $basic;
 
 	// Redirect with our error code.
 	Helpers\account_page_redirect( $setup );
@@ -185,13 +189,13 @@ function add_endpoint_notices() {
 	}
 
 	// Check for a response code.
-	$msg_code   = ! empty( $_GET['errcode'] ) ? sanitize_text_field( $_GET['errcode'] ) : 'unknown';
+	$msg_code = ! empty( $_GET['errcode'] ) ? sanitize_text_field( $_GET['errcode'] ) : 'unknown';
 
 	// Figure out the text.
-	$msg_text   = ! empty( $_GET['message'] ) ? sanitize_text_field( $_GET['message'] ) : Helpers\notice_text( $msg_code );
+	$msg_text = ! empty( $_GET['message'] ) ? sanitize_text_field( $_GET['message'] ) : Helpers\notice_text( $msg_code );
 
 	// Determine the message type.
-	$msg_type   = empty( $_GET['success'] ) ? 'error' : 'success';
+	$msg_type = empty( $_GET['success'] ) ? 'error' : 'success';
 
 	// Output the message.
 	echo Layout\get_account_message_markup( $msg_text, $msg_type, true, false ); // WPCS: XSS ok.
@@ -212,7 +216,7 @@ function add_endpoint_title( $title ) {
 	}
 
 	// Set our new page title.
-	$title  = apply_filters( Core\HOOK_PREFIX . 'endpoint_title', __( 'My Product Interest Signups', 'woo-interest-in-products' ) );
+	$title = apply_filters( Core\HOOK_PREFIX . 'endpoint_title', __( 'My Product Interest Signups', 'woo-interest-in-products' ) );
 
 	// Remove the filter so we don't loop endlessly.
 	remove_filter( 'the_title', __NAMESPACE__ . '\add_endpoint_title' );
@@ -231,10 +235,10 @@ function add_endpoint_title( $title ) {
 function add_endpoint_menu_item( $items ) {
 
 	// Set up our menu item title.
-	$title  = apply_filters( Core\HOOK_PREFIX . 'endpoint_menu_item', __( 'Product Interest', 'woo-interest-in-products' ) );
+	$title = apply_filters( Core\HOOK_PREFIX . 'endpoint_menu_item', __( 'Product Interest', 'woo-interest-in-products' ) );
 
 	// Add it to the array.
-	$items  = wp_parse_args( array( Core\FRONT_VAR => esc_attr( $title ) ), $items );
+	$items = wp_parse_args( array( Core\FRONT_VAR => esc_attr( $title ) ), $items );
 
 	// Return our tabs.
 	return Helpers\adjust_account_tab_order( $items );
@@ -248,7 +252,7 @@ function add_endpoint_menu_item( $items ) {
 function add_endpoint_content() {
 
 	// Fetch the products the user has signed up for.
-	$dataset    = Queries\get_products_for_customer( get_current_user_id() );
+	$dataset = Queries\get_products_for_customer( get_current_user_id() );
 
 	// If we don't have products, just return a message.
 	if ( ! $dataset ) {

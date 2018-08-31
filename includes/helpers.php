@@ -24,60 +24,60 @@ function notice_text( $code = '' ) {
 	// Handle my different error codes.
 	switch ( esc_attr( strtolower( $code ) ) ) {
 
-		case 'success-change-interests' :
+		case 'success-change-interests':
 			$msgtxt = __( 'Your interest selections have been updated.', 'woo-interest-in-products' );
 			break;
 
-		case 'success-general' :
-		case 'success' :
+		case 'success-general':
+		case 'success':
 			$msgtxt = __( 'Success! Your request has been completed.', 'woo-interest-in-products' );
 			break;
 
-		case 'update-error' :
+		case 'update-error':
 			$msgtxt = __( 'Your settings could not be updated.', 'woo-interest-in-products' );
 			break;
 
-		case 'missing-nonce' :
+		case 'missing-nonce':
 			$msgtxt = __( 'The required nonce was missing.', 'woo-interest-in-products' );
 			break;
 
-		case 'bad-nonce' :
+		case 'bad-nonce':
 			$msgtxt = __( 'The required nonce was invalid.', 'woo-interest-in-products' );
 			break;
 
-		case 'invalid-nonce' :
+		case 'invalid-nonce':
 			$msgtxt = __( 'The required nonce was missing or invalid.', 'woo-interest-in-products' );
 			break;
 
-		case 'missing-customer-id' :
+		case 'missing-customer-id':
 			$msgtxt = __( 'The required customer ID was not provided.', 'woo-interest-in-products' );
 			break;
 
-		case 'no-customer' :
+		case 'no-customer':
 			$msgtxt = __( 'The current customer could not be determined.', 'woo-interest-in-products' );
 			break;
 
-		case 'no-original-ids' :
+		case 'no-original-ids':
 			$msgtxt = __( 'No existing product signups were found.', 'woo-interest-in-products' );
 			break;
 
-		case 'customer-update-failed' :
+		case 'customer-update-failed':
 			$msgtxt = __( 'Your interest selections could not be updated.', 'woo-interest-in-products' );
 			break;
 
-		case 'missing-required-field' :
+		case 'missing-required-field':
 			$msgtxt = __( 'Please review all the required fields.', 'woo-interest-in-products' );
 			break;
 
-		case 'unknown' :
-		case 'unknown-error' :
+		case 'unknown':
+		case 'unknown-error':
 			$msgtxt = __( 'There was an unknown error with your request.', 'woo-interest-in-products' );
 			break;
 
-		default :
+		default:
 			$msgtxt = __( 'There was an error with your request.', 'woo-interest-in-products' );
 
-		// End all case breaks.
+			// End all case breaks.
 	}
 
 	// Return it with a filter.
@@ -95,7 +95,7 @@ function notice_text( $code = '' ) {
 function maybe_product_enabled( $product_id = 0, $strings = false ) {
 
 	// Check the meta.
-	$meta   = get_post_meta( $product_id, Core\PROD_META_KEY, true );
+	$meta = get_post_meta( $product_id, Core\PROD_META_KEY, true );
 
 	// Return the string variant if requested.
 	if ( $strings ) {
@@ -142,10 +142,10 @@ function maybe_account_endpoint_page( $in_query = false ) {
 function get_account_tab_link( $args = array() ) {
 
 	// Set my base link.
-	$page   = get_permalink( get_option( 'woocommerce_myaccount_page_id' ) );
+	$page = get_permalink( get_option( 'woocommerce_myaccount_page_id' ) );
 
 	// Add our link.
-	$link   = rtrim( $page, '/' ) . '/' . Core\FRONT_VAR;
+	$link = rtrim( $page, '/' ) . '/' . Core\FRONT_VAR;
 
 	// Return the link with or without args.
 	return ! empty( $args ) ? add_query_arg( $args, $link ) : $link;
@@ -166,7 +166,7 @@ function account_page_redirect( $args = array() ) {
 	}
 
 	// Set the link.
-	$setup  = get_account_tab_link( $args );
+	$setup = get_account_tab_link( $args );
 
 	// Do the redirect.
 	wp_redirect( $setup );
@@ -189,7 +189,7 @@ function filter_product_cart( $cart = array(), $enable = array() ) {
 	}
 
 	// Set an empty variable.
-	$data   = array();
+	$data = array();
 
 	// Loop our cart and look for products.
 	foreach ( $cart as $key => $item ) {
@@ -247,13 +247,16 @@ function get_admin_menu_link() {
 	}
 
 	// Set my slug.
-	$slug   = trim( Core\MENU_SLUG );
+	$slug = trim( Core\MENU_SLUG );
 
 	// Build out the link if we don't have our function.
 	if ( ! function_exists( 'menu_page_url' ) ) {
 
 		// Set my args.
-		$args   = array( 'post_type' => 'product', 'page' => $slug );
+		$args = array(
+			'post_type' => 'product',
+			'page'      => $slug,
+		);
 
 		// Return the link with our args.
 		return add_query_arg( $args, admin_url( 'edit.php' ) );
@@ -278,15 +281,20 @@ function admin_page_redirect( $args = array(), $response = true ) {
 	}
 
 	// Handle the setup.
-	$redirect_args  = wp_parse_args( $args, array( 'post_type' => 'product', 'page' => trim( Core\MENU_SLUG ) ) );
+	$redirect_args = wp_parse_args(
+		$args, array(
+			'post_type' => 'product',
+			'page'      => trim( Core\MENU_SLUG ),
+		)
+	);
 
 	// Add the default args we need in the return.
 	if ( $response ) {
-		$redirect_args  = wp_parse_args( array( 'wc-product-interest-response' => 1 ), $redirect_args );
+		$redirect_args = wp_parse_args( array( 'wc-product-interest-response' => 1 ), $redirect_args );
 	}
 
 	// Now set my redirect link.
-	$redirect_link  = add_query_arg( $redirect_args, admin_url( 'edit.php' ) );
+	$redirect_link = add_query_arg( $redirect_args, admin_url( 'edit.php' ) );
 
 	// Do the redirect.
 	wp_safe_redirect( $redirect_link );
@@ -384,11 +392,11 @@ function check_admin_screen( $check = 'post_type', $compare = '', $action = 'com
 		// Handle my different action types.
 		switch ( $action ) {
 
-			case 'compare' :
+			case 'compare':
 				return ! empty( $compare ) && sanitize_key( $compare ) === $screen->post_type ? true : false;
 				break;
 
-			case 'return' :
+			case 'return':
 				return $screen->post_type;
 				break;
 		}
@@ -405,11 +413,11 @@ function check_admin_screen( $check = 'post_type', $compare = '', $action = 'com
 		// Handle my different action types.
 		switch ( $action ) {
 
-			case 'compare' :
+			case 'compare':
 				return ! empty( $compare ) && sanitize_key( $compare ) === $screen->base ? true : false;
 				break;
 
-			case 'return' :
+			case 'return':
 				return $screen->base;
 				break;
 		}
@@ -426,11 +434,11 @@ function check_admin_screen( $check = 'post_type', $compare = '', $action = 'com
 		// Handle my different action types.
 		switch ( $action ) {
 
-			case 'compare' :
+			case 'compare':
 				return ! empty( $compare ) && sanitize_key( $compare ) === $screen->id ? true : false;
 				break;
 
-			case 'return' :
+			case 'return':
 				return $screen->id;
 				break;
 		}
@@ -458,7 +466,7 @@ function sanitize_text_recursive( $input, $filter = false ) {
 	foreach ( $input as $key => $data ) {
 
 		// Handle the setup.
-		$setup  = is_array( $data ) ? array_map( 'sanitize_text_field', $data ) : sanitize_text_field( $data );
+		$setup = is_array( $data ) ? array_map( 'sanitize_text_field', $data ) : sanitize_text_field( $data );
 
 		// Skip if are empty and said no filter.
 		if ( empty( $setup ) && ! empty( $filter ) ) {
@@ -484,7 +492,6 @@ function clean_export( $string ) {
 
 	// Original PHP code by Chirp Internet: www.chirp.com.au
 	// Please acknowledge use of this code by including this header.
-
 	// Handle my different string checks.
 	switch ( $string ) {
 
@@ -496,9 +503,9 @@ function clean_export( $string ) {
 			$string = 'FALSE';
 			break;
 
-		case preg_match( "/^0/", $string ):
-		case preg_match( "/^\+?\d{8,}$/", $string ):
-		case preg_match( "/^\d{4}.\d{1,2}.\d{1,2}/", $string ):
+		case preg_match( '/^0/', $string ):
+		case preg_match( '/^\+?\d{8,}$/', $string ):
+		case preg_match( '/^\d{4}.\d{1,2}.\d{1,2}/', $string ):
 			$string = "'$string";
 			break;
 
@@ -509,7 +516,7 @@ function clean_export( $string ) {
 		default:
 			$string = mb_convert_encoding( $string, 'UTF-16LE', 'UTF-8' );
 
-		// End all case breaks.
+			// End all case breaks.
 	}
 }
 
@@ -533,16 +540,16 @@ function build_date_display( $date = '', $key = '', $format = '' ) {
 	$formatting = ! empty( $format ) ? esc_attr( $format ) : get_option( 'date_format', 'Y-m-d' );
 
 	// Set the date to a stamp.
-	$timestamp  = strtotime( $date );
+	$timestamp = strtotime( $date );
 
 	// Now set the formatting.
-	$formatted  = date( $formatting, $timestamp );
+	$formatted = date( $formatting, $timestamp );
 
 	// Get my relative date.
-	$relative   = sprintf( _x( '%s ago', '%s = human-readable time difference', 'woo-interest-in-products' ), human_time_diff( $timestamp, current_time( 'timestamp', 1 ) ) );
+	$relative = sprintf( _x( '%s ago', '%s = human-readable time difference', 'woo-interest-in-products' ), human_time_diff( $timestamp, current_time( 'timestamp', 1 ) ) );
 
 	// Now set an array of each value.
-	$dataset    = array(
+	$dataset = array(
 		'timestamp' => $timestamp,
 		'formatted' => $formatted,
 		'relative'  => $relative,

@@ -32,7 +32,7 @@ add_action( 'woocommerce_process_product_meta', __NAMESPACE__ . '\save_product_s
 function load_post_meta_assets( $hook ) {
 
 	// Run the check for being on the post editor on products.
-	$is_editor  = Helpers\check_admin_screen( 'post_type', 'product' );
+	$is_editor = Helpers\check_admin_screen( 'post_type', 'product' );
 
 	// Bail if we aren't there.
 	if ( ! $is_editor ) {
@@ -43,10 +43,10 @@ function load_post_meta_assets( $hook ) {
 	$handle = 'woo-interest-in-products-editor';
 
 	// Set a file suffix structure based on whether or not we want a minified version.
-	$file   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? $handle : $handle . '.min';
+	$file = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? $handle : $handle . '.min';
 
 	// Set a version for whether or not we're debugging.
-	$vers   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : Core\VERS;
+	$vers = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : Core\VERS;
 
 	// Load our CSS file.
 	wp_enqueue_style( $handle, Core\ASSETS_URL . '/css/' . $file . '.css', false, $vers, 'all' );
@@ -80,7 +80,7 @@ function load_subscribed_customers_metabox( $post ) {
 function display_interested_customers( $post ) {
 
 	// Grab the customers.
-	$customers  = Queries\get_customers_for_product( $post->ID );
+	$customers = Queries\get_customers_for_product( $post->ID );
 
 	// If no customers exist, display a message and bail.
 	if ( ! $customers ) {
@@ -147,7 +147,7 @@ function save_product_subscribe( $post_id ) {
 	}
 
 	// Get our product.
-	$prod   = wc_get_product( $post_id );
+	$prod = wc_get_product( $post_id );
 
 	// Handle the meta based on what was passed.
 	if ( ! empty( $_POST['include_product_subscribe'] ) ) {

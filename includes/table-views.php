@@ -13,7 +13,9 @@ use LiquidWeb\WooInterestInProducts\Queries as Queries;
 use LiquidWeb\WooInterestInProducts\DataExport as Export;
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 // WP_List_Table is not loaded automatically so we need to load it in our application
@@ -35,11 +37,13 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	public function __construct() {
 
 		// Set parent defaults.
-		parent::__construct( array(
-			'singular' => __( 'Product Interest Signup', 'woo-interest-in-products' ),
-			'plural'   => __( 'Product Interest Signups', 'woo-interest-in-products' ),
-			'ajax'     => false,
-		) );
+		parent::__construct(
+			array(
+				'singular' => __( 'Product Interest Signup', 'woo-interest-in-products' ),
+				'plural'   => __( 'Product Interest Signups', 'woo-interest-in-products' ),
+				'ajax'     => false,
+			)
+		);
 	}
 
 	/**
@@ -50,14 +54,14 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	public function prepare_items() {
 
 		// Roll out each part.
-		$columns    = $this->get_columns();
-		$hidden     = $this->get_hidden_columns();
-		$sortable   = $this->get_sortable_columns();
-		$dataset    = $this->table_data();
+		$columns  = $this->get_columns();
+		$hidden   = $this->get_hidden_columns();
+		$sortable = $this->get_sortable_columns();
+		$dataset  = $this->table_data();
 
 		// Check for the _POST value to filter.
-		if ( ! empty( $_POST['wc-product-interest-filter-submit' ] ) ) {
-			$dataset    = $this->maybe_filter_dataset( $dataset );
+		if ( ! empty( $_POST['wc-product-interest-filter-submit'] ) ) {
+			$dataset = $this->maybe_filter_dataset( $dataset );
 		}
 
 		// Handle our sorting.
@@ -69,14 +73,16 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		$current    = $this->get_pagenum();
 
 		// Set my pagination args.
-		$this->set_pagination_args( array(
-			'total_items' => $item_count,
-			'per_page'    => $paginate,
-			'total_pages' => ceil( $item_count / $paginate ),
-		));
+		$this->set_pagination_args(
+			array(
+				'total_items' => $item_count,
+				'per_page'    => $paginate,
+				'total_pages' => ceil( $item_count / $paginate ),
+			)
+		);
 
 		// Slice up our dataset.
-		$dataset    = array_slice( $dataset, ( ( $current - 1 ) * $paginate ), $paginate );
+		$dataset = array_slice( $dataset, ( ( $current - 1 ) * $paginate ), $paginate );
 
 		// Do the column headers
 		$this->_column_headers = array( $columns, $hidden, $sortable );
@@ -88,7 +94,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		$this->process_bulk_action();
 
 		// Check for the _POST value to export.
-		if ( ! empty( $_POST['wc-product-interest-export-submit' ] ) && 'all' === sanitize_text_field( $_POST['wc-product-interest-export-submit' ] ) ) {
+		if ( ! empty( $_POST['wc-product-interest-export-submit'] ) && 'all' === sanitize_text_field( $_POST['wc-product-interest-export-submit'] ) ) {
 			$this->process_export_submit();
 		}
 
@@ -104,7 +110,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	public function get_columns() {
 
 		// Build our array of column setups.
-		$setup  = array(
+		$setup = array(
 			'cb'            => '<input type="checkbox" />',
 			'customer_name' => __( 'Customer Name', 'woo-interest-in-products' ),
 			'product_name'  => __( 'Product Name', 'woo-interest-in-products' ),
@@ -176,7 +182,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	protected function product_filter_dropdown( $echo = true ) {
 
 		// Get our enabled products.
-		$enabled_products   = Queries\get_enabled_products();
+		$enabled_products = Queries\get_enabled_products();
 
 		// Bail if we don't have any products to filter by.
 		if ( ! $enabled_products ) {
@@ -187,7 +193,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		$select = ! empty( $_POST['wc-product-interest-product-filter'] ) ? absint( $_POST['wc-product-interest-product-filter'] ) : 0;
 
 		// Set an empty.
-		$build  = '';
+		$build = '';
 
 		// Wrap the product dropdown in a div.
 		$build .= '<div class="wc-product-interest-tablenav-item wc-product-interest-table-filter wc-product-interest-table-filter-products">';
@@ -202,14 +208,14 @@ class ProductInterestSignups_Table extends WP_List_Table {
 				$build .= '<option value="0">' . esc_html__( 'All Products', 'woo-interest-in-products' ) . '</option>';
 
 				// Now loop my product IDs and show them.
-				foreach ( $enabled_products as $product_id ) {
+		foreach ( $enabled_products as $product_id ) {
 
-					// Set our title.
-					$pname  = get_the_title( $product_id );
+			// Set our title.
+			$pname = get_the_title( $product_id );
 
-					// And load the dropdown.
-					$build .= '<option value="' . absint( $product_id ) . '" ' . selected( $select, absint( $product_id ), 0 ) . '>' . esc_html( $pname ) . '</option>';
-				}
+			// And load the dropdown.
+			$build .= '<option value="' . absint( $product_id ) . '" ' . selected( $select, absint( $product_id ), 0 ) . '>' . esc_html( $pname ) . '</option>';
+		}
 
 			// Close the select.
 			$build .= '</select>';
@@ -236,7 +242,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	protected function customer_filter_dropdown( $echo = true ) {
 
 		// Get our current customers.
-		$current_customers  = Queries\get_all_customers();
+		$current_customers = Queries\get_all_customers();
 
 		// Bail if we don't have any current customers to filter by.
 		if ( ! $current_customers ) {
@@ -247,7 +253,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		$select = ! empty( $_POST['wc-product-interest-customer-filter'] ) ? absint( $_POST['wc-product-interest-customer-filter'] ) : 0;
 
 		// Set an empty.
-		$build  = '';
+		$build = '';
 
 		// Wrap the product dropdown in a div.
 		$build .= '<div class="wc-product-interest-tablenav-item wc-product-interest-table-filter wc-product-interest-table-filter-customers">';
@@ -262,9 +268,9 @@ class ProductInterestSignups_Table extends WP_List_Table {
 				$build .= '<option value="0">' . esc_html__( 'All Customers', 'woo-interest-in-products' ) . '</option>';
 
 				// Now loop my customers and show them.
-				foreach ( $current_customers as $customer_id => $customer_data ) {
-					$build .= '<option value="' . absint( $customer_id ) . '" ' . selected( $select, absint( $customer_id ), 0 ) . '>' . esc_html( $customer_data['display_name'] ) . '</option>';
-				}
+		foreach ( $current_customers as $customer_id => $customer_data ) {
+			$build .= '<option value="' . absint( $customer_id ) . '" ' . selected( $select, absint( $customer_id ), 0 ) . '>' . esc_html( $customer_data['display_name'] ) . '</option>';
+		}
 
 			// Close the select.
 			$build .= '</select>';
@@ -292,7 +298,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	 */
 	protected function handle_row_actions( $item, $column_name, $primary ) {
 		return apply_filters( Core\HOOK_PREFIX . 'table_row_actions', '', $item, $column_name, $primary );
- 	}
+	}
 
 	/**
 	 * Define the sortable columns.
@@ -302,7 +308,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	public function get_sortable_columns() {
 
 		// Build our array of sortable columns.
-		$setup  = array(
+		$setup = array(
 			'customer_name' => array( 'customer_name', false ),
 			'product_name'  => array( 'product_name', true ),
 			'signup_date'   => array( 'signup_date', true ),
@@ -331,9 +337,9 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	protected function get_bulk_actions() {
 
 		// Make a basic array of the actions we wanna include.
-		$setup  = array(
+		$setup = array(
 			'wc_product_interest_unsubscribe' => __( 'Unsubscribe', 'woo-interest-in-products' ),
-			'wc_product_interest_export'      => __( 'Export', 'woo-interest-in-products' )
+			'wc_product_interest_export'      => __( 'Export', 'woo-interest-in-products' ),
 		);
 
 		// Return it filtered.
@@ -359,25 +365,35 @@ class ProductInterestSignups_Table extends WP_List_Table {
 
 		// Fail on a missing or bad nonce.
 		if ( empty( $_POST['wc_product_interest_nonce_name'] ) || ! wp_verify_nonce( $_POST['wc_product_interest_nonce_name'], 'wc_product_interest_nonce_action' ) ) {
-			Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'bad_nonce' ) );
+			Helpers\admin_page_redirect(
+				array(
+					'success' => 0,
+					'errcode' => 'bad_nonce',
+				)
+			);
 		}
 
 		// Check for the array of relationship IDs being passed.
 		if ( empty( $_POST['wc_product_interest_ids'] ) ) {
-			Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'no_ids' ) );
+			Helpers\admin_page_redirect(
+				array(
+					'success' => 0,
+					'errcode' => 'no_ids',
+				)
+			);
 		}
 
 		// Set and sanitize my IDs.
-		$relationship_ids   = array_map( 'absint', $_POST['wc_product_interest_ids'] );
+		$relationship_ids = array_map( 'absint', $_POST['wc_product_interest_ids'] );
 
 		// Handle my different bulk actions.
 		switch ( $this->current_action() ) {
 
-			case 'wc_product_interest_unsubscribe' :
+			case 'wc_product_interest_unsubscribe':
 				$this->process_bulk_unsubscribe( $relationship_ids );
 				break;
 
-			case 'wc_product_interest_export' :
+			case 'wc_product_interest_export':
 				$this->process_bulk_export( $relationship_ids );
 				break;
 
@@ -385,7 +401,12 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		}
 
 		// Got to the end? Why?
-		Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'unknown' ) );
+		Helpers\admin_page_redirect(
+			array(
+				'success' => 0,
+				'errcode' => 'unknown',
+			)
+		);
 	}
 
 	/**
@@ -402,15 +423,25 @@ class ProductInterestSignups_Table extends WP_List_Table {
 
 		// Fail on a missing or bad nonce.
 		if ( empty( $_POST['wc_product_interest_nonce_name'] ) || ! wp_verify_nonce( $_POST['wc_product_interest_nonce_name'], 'wc_product_interest_nonce_action' ) ) {
-			Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'bad_nonce' ) );
+			Helpers\admin_page_redirect(
+				array(
+					'success' => 0,
+					'errcode' => 'bad_nonce',
+				)
+			);
 		}
 
 		// Fetch our relationships.
-		$relationship_ids   = Queries\get_all_subscription_data( 'ids' );
+		$relationship_ids = Queries\get_all_subscription_data( 'ids' );
 
 		// Check for the array of relationship IDs being passed.
 		if ( empty( $relationship_ids ) ) {
-			Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'no_ids' ) );
+			Helpers\admin_page_redirect(
+				array(
+					'success' => 0,
+					'errcode' => 'no_ids',
+				)
+			);
 		}
 
 		// Run the export bulk.
@@ -420,7 +451,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * Handle the unsubscribe bulk action.
 	 *
-	 * @param  array  $relationship_ids  The IDs requested via bulk.
+	 * @param  array $relationship_ids  The IDs requested via bulk.
 	 *
 	 * @return void
 	 */
@@ -447,13 +478,19 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		}
 
 		// Redirect to the success.
-		Helpers\admin_page_redirect( array( 'success' => 1, 'action' => 'unsubscribed', 'count' => count( $relationship_ids ) ) );
+		Helpers\admin_page_redirect(
+			array(
+				'success' => 1,
+				'action'  => 'unsubscribed',
+				'count'   => count( $relationship_ids ),
+			)
+		);
 	}
 
 	/**
 	 * Handle the export bulk action.
 	 *
-	 * @param  array  $relationship_ids  The IDs requested via bulk.
+	 * @param  array $relationship_ids  The IDs requested via bulk.
 	 *
 	 * @return void
 	 */
@@ -468,10 +505,15 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		update_option( Core\OPTION_PREFIX . 'export_ids', $relationship_ids, 'no' );
 
 		// Set the nonce for the export.
-		$nonce  = wp_create_nonce( 'wc_product_interest_export' );
+		$nonce = wp_create_nonce( 'wc_product_interest_export' );
 
 		// Redirect to trigger the export function.
-		Helpers\admin_page_redirect( array( 'wc_product_interest_export' => 1, 'nonce' => esc_attr( $nonce ) ), false );
+		Helpers\admin_page_redirect(
+			array(
+				'wc_product_interest_export' => 1,
+				'nonce'                      => esc_attr( $nonce ),
+			), false
+		);
 	}
 
 	/**
@@ -484,8 +526,8 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	protected function purge_customer_transients( $customer_ids = array() ) {
 
 		// First sanitize, then filter.
-		$customer_ids   = array_map( 'absint', $customer_ids );
-		$customer_ids   = array_unique( $customer_ids );
+		$customer_ids = array_map( 'absint', $customer_ids );
+		$customer_ids = array_unique( $customer_ids );
 
 		// Now loop and purge.
 		foreach ( $customer_ids as $customer_id ) {
@@ -503,8 +545,8 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	protected function purge_product_transients( $product_ids = array() ) {
 
 		// First sanitize, then filter.
-		$product_ids    = array_map( 'absint', $product_ids );
-		$product_ids    = array_unique( $product_ids );
+		$product_ids = array_map( 'absint', $product_ids );
+		$product_ids = array_unique( $product_ids );
 
 		// Now loop and purge.
 		foreach ( $product_ids as $product_id ) {
@@ -515,7 +557,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * Checkbox column.
 	 *
-	 * @param  array  $item  The item from the data array.
+	 * @param  array $item  The item from the data array.
 	 *
 	 * @return string
 	 */
@@ -531,22 +573,22 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * The visible name column.
 	 *
-	 * @param  array  $item  The item from the data array.
+	 * @param  array $item  The item from the data array.
 	 *
 	 * @return string
 	 */
 	protected function column_customer_name( $item ) {
 
 		// Build my markup.
-		$setup  = '';
+		$setup = '';
 
 		// Set the display name.
-		$setup .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-customer-name">';
+		$setup     .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-customer-name">';
 			$setup .= esc_html( $item['customer_name'] );
-		$setup .= '</span>';
+		$setup     .= '</span>';
 
 		// Create my formatted date.
-		$setup  = apply_filters( Core\HOOK_PREFIX . 'column_customer_name', $setup, $item );
+		$setup = apply_filters( Core\HOOK_PREFIX . 'column_customer_name', $setup, $item );
 
 		// Return, along with our row actions.
 		return $setup . $this->row_actions( $this->setup_row_action_items( $item ) );
@@ -555,27 +597,27 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * The product name column.
 	 *
-	 * @param  array  $item  The item from the data array.
+	 * @param  array $item  The item from the data array.
 	 *
 	 * @return string
 	 */
 	protected function column_product_name( $item ) {
 
 		// Build my markup.
-		$setup  = '';
+		$setup = '';
 
 		// Set the product name.
-		$setup .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-product-name">';
+		$setup     .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-product-name">';
 			$setup .= esc_html( $item['product_name'] );
-		$setup .= '</span>';
+		$setup     .= '</span>';
 
 		// Include the SKU if we have one.
 		if ( ! empty( $item['product_sku'] ) ) {
 
 			// Output the SKU field.
-			$setup .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-small-line wc-product-interest-admin-table-product-sku">';
+			$setup     .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-small-line wc-product-interest-admin-table-product-sku">';
 				$setup .= '<label>' . esc_html__( 'SKU', 'woo-interest-in-products' ) . '</label>: ' . esc_html( $item['product_sku'] );
-			$setup .= '</span>';
+			$setup     .= '</span>';
 
 		}
 
@@ -586,7 +628,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * The signup date column.
 	 *
-	 * @param  array  $item  The item from the data array.
+	 * @param  array $item  The item from the data array.
 	 *
 	 * @return string
 	 */
@@ -596,17 +638,17 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		$date_setup = Helpers\build_date_display( $item['signup_date'] );
 
 		// Build my markup.
-		$setup  = '';
+		$setup = '';
 
 		// Set the signup date formatted.
-		$setup .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-signup-date">';
+		$setup     .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-signup-date">';
 			$setup .= esc_html( $date_setup['formatted'] );
-		$setup .= '</span>';
+		$setup     .= '</span>';
 
 		// Set the signup date relative.
-		$setup .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-small-line wc-product-interest-admin-table-signup-relative">';
+		$setup     .= '<span class="wc-product-interest-admin-table-display wc-product-interest-admin-table-small-line wc-product-interest-admin-table-signup-relative">';
 			$setup .= esc_html( $date_setup['relative'] );
-		$setup .= '</span>';
+		$setup     .= '</span>';
 
 		// Return my formatted date.
 		return apply_filters( Core\HOOK_PREFIX . 'column_signup_date', $setup, $item );
@@ -615,14 +657,14 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * Our column with eventual actions we might have.
 	 *
-	 * @param  array  $item  The item from the data array.
+	 * @param  array $item  The item from the data array.
 	 *
 	 * @return string
 	 */
 	protected function column_action_list( $item ) {
 
 		// Get my list of items.
-		$action_list_args   = $this->column_action_list_args( $item );
+		$action_list_args = $this->column_action_list_args( $item );
 
 		// Bail if nothing.
 		if ( ! $action_list_args ) {
@@ -630,7 +672,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		}
 
 		// Build my markup.
-		$setup  = '';
+		$setup = '';
 
 		// Set up our list.
 		$setup .= '<ul class="wc-product-interest-admin-list-wrap">';
@@ -639,14 +681,14 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		foreach ( $action_list_args as $action => $args ) {
 
 			// Create our class.
-			$class  = 'wc-product-interest-admin-list-item wc-product-interest-admin-list-item-' . sanitize_html_class( $action );
+			$class = 'wc-product-interest-admin-list-item wc-product-interest-admin-list-item-' . sanitize_html_class( $action );
 
 			// Create our label.
-			$label  = esc_html( $args['label'] );
+			$label = esc_html( $args['label'] );
 
 			// Add the icon if we have it.
 			if ( ! empty( $args['icon'] ) ) {
-				$label  = '<i class="wc-product-interest-admin-icon dashicons ' . esc_attr( $args['icon'] ) . '"></i> ' . $label;
+				$label = '<i class="wc-product-interest-admin-icon dashicons ' . esc_attr( $args['icon'] ) . '"></i> ' . $label;
 			}
 
 			// Open the individual list item.
@@ -672,7 +714,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * The data for our actions column.
 	 *
-	 * @param  array  $item  The item from the data array.
+	 * @param  array $item  The item from the data array.
 	 *
 	 * @return string
 	 */
@@ -682,21 +724,21 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		$setup = array(
 
 			// The "view customer" link.
-			'view'      => array(
+			'view'    => array(
 				'label' => __( 'View Customer', 'woo-interest-in-products' ),
 				'link'  => $item['customer_edit'],
 				'icon'  => 'dashicons-id',
 			),
 
 			// The "view orders" link.
-			'orders'    => array(
+			'orders'  => array(
 				'label' => __( 'View Orders', 'woo-interest-in-products' ),
 				'link'  => $item['customer_orders'],
 				'icon'  => 'dashicons-cart',
 			),
 
 			// The "view product" link.
-			'product'   => array(
+			'product' => array(
 				'label' => __( 'View Product', 'woo-interest-in-products' ),
 				'link'  => $item['product_edit'],
 				'icon'  => 'dashicons-album',
@@ -711,7 +753,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * Our two hidden fields for the IDs we need.
 	 *
-	 * @param  array  $item  The item from the data array.
+	 * @param  array $item  The item from the data array.
 	 *
 	 * @return string
 	 */
@@ -723,7 +765,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		}
 
 		// Set our empty.
-		$build  = '';
+		$build = '';
 
 		// Add the customer ID, assuming we have one.
 		if ( ! empty( $item['customer_id'] ) ) {
@@ -741,7 +783,6 @@ class ProductInterestSignups_Table extends WP_List_Table {
 
 	/**
 	 * Message to be displayed when there are no items
-	 *
 	 */
 	public function no_items() {
 
@@ -767,7 +808,7 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	private function table_data() {
 
 		// Get all the relationship data.
-		$relationships  = Queries\get_all_subscription_data();
+		$relationships = Queries\get_all_subscription_data();
 
 		// Bail with no data.
 		if ( ! $relationships ) {
@@ -775,16 +816,20 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		}
 
 		// Set my empty.
-		$data   = array();
+		$data = array();
 
 		// Now loop each customer info.
 		foreach ( $relationships as $relationship_id => $relationship_data ) {
 
 			// Set my order args.
-			$order_args = array( 'post_type' => 'shop_order', 'post_status' => 'all', '_customer_user' => absint( $relationship_data['customer_id'] ) );
+			$order_args = array(
+				'post_type'      => 'shop_order',
+				'post_status'    => 'all',
+				'_customer_user' => absint( $relationship_data['customer_id'] ),
+			);
 
 			// Set the array of the data we want.
-			$setup  = array(
+			$setup = array(
 				'id'              => absint( $relationship_id ),
 				'product_id'      => absint( $relationship_data['product_id'] ),
 				'product_name'    => esc_attr( $relationship_data['product']['post_title'] ),
@@ -810,14 +855,14 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	/**
 	 * Take the default dataset and filter it.
 	 *
-	 * @param  array  $dataset  The current dataset we have.
+	 * @param  array $dataset  The current dataset we have.
 	 *
 	 * @return array
 	 */
 	protected function maybe_filter_dataset( $dataset = array() ) {
 
 		// Return the dataset we got if we don't have the submit.
-		if ( empty( $_POST['wc-product-interest-filter-submit' ] ) ) {
+		if ( empty( $_POST['wc-product-interest-filter-submit'] ) ) {
 			return $dataset;
 		}
 
@@ -828,17 +873,22 @@ class ProductInterestSignups_Table extends WP_List_Table {
 
 		// Fail on a missing or bad nonce.
 		if ( empty( $_POST['wc_product_interest_nonce_name'] ) || ! wp_verify_nonce( $_POST['wc_product_interest_nonce_name'], 'wc_product_interest_nonce_action' ) ) {
-			Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'bad_nonce' ) );
+			Helpers\admin_page_redirect(
+				array(
+					'success' => 0,
+					'errcode' => 'bad_nonce',
+				)
+			);
 		}
 
 		// Handle a product ID filter.
 		if ( ! empty( $_POST['wc-product-interest-product-filter'] ) && 'product' === get_post_type( absint( $_POST['wc-product-interest-product-filter'] ) ) ) {
-			$dataset    = $this->filter_dataset_by_id( $dataset, absint( $_POST['wc-product-interest-product-filter'] ), 'product_id' );
+			$dataset = $this->filter_dataset_by_id( $dataset, absint( $_POST['wc-product-interest-product-filter'] ), 'product_id' );
 		}
 
 		// Handle a customer ID filter.
 		if ( ! empty( $_POST['wc-product-interest-customer-filter'] ) ) {
-			$dataset    = $this->filter_dataset_by_id( $dataset, absint( $_POST['wc-product-interest-customer-filter'] ), 'customer_id' );
+			$dataset = $this->filter_dataset_by_id( $dataset, absint( $_POST['wc-product-interest-customer-filter'] ), 'customer_id' );
 		}
 
 		// And return the dataset, however we have it.
@@ -887,13 +937,13 @@ class ProductInterestSignups_Table extends WP_List_Table {
 		// Run our column switch.
 		switch ( $column_name ) {
 
-			case 'customer_name' :
-			case 'product_name' :
-			case 'signup_date' :
-			case 'action_list' :
+			case 'customer_name':
+			case 'product_name':
+			case 'signup_date':
+			case 'action_list':
 				return ! empty( $dataset[ $column_name ] ) ? $dataset[ $column_name ] : '';
 
-			default :
+			default:
 				return apply_filters( Core\HOOK_PREFIX . 'table_column_default', '', $dataset, $column_name );
 		}
 	}
@@ -926,8 +976,8 @@ class ProductInterestSignups_Table extends WP_List_Table {
 	private function sort_data( $a, $b ) {
 
 		// Set defaults and check for query strings.
-		$ordby  = ! empty( $_GET['orderby'] ) ? $_GET['orderby'] : 'signup_date';
-		$order  = ! empty( $_GET['order'] ) ? $_GET['order'] : 'asc';
+		$ordby = ! empty( $_GET['orderby'] ) ? $_GET['orderby'] : 'signup_date';
+		$order = ! empty( $_GET['order'] ) ? $_GET['order'] : 'asc';
 
 		// Set my result up.
 		$result = strcmp( $a[ $ordby ], $b[ $ordby ] );

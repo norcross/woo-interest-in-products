@@ -47,10 +47,10 @@ function update_customer_product_interest() {
 	}
 
 	// Set my customer ID as a variable because I use it a lot.
-	$customer_id    = absint( $_POST['customer_id'] );
+	$customer_id = absint( $_POST['customer_id'] );
 
 	// Determine my original IDs.
-	$original_ids   = ! empty( $_POST['original_ids'] ) ? explode( ',', sanitize_text_field( $_POST['original_ids'] ) ) : Queries\get_products_for_customer( $customer_id, 'relationship_id' );
+	$original_ids = ! empty( $_POST['original_ids'] ) ? explode( ',', sanitize_text_field( $_POST['original_ids'] ) ) : Queries\get_products_for_customer( $customer_id, 'relationship_id' );
 
 	// Check for the original IDs to exist.
 	if ( empty( $original_ids ) ) {
@@ -68,10 +68,10 @@ function update_customer_product_interest() {
 	}
 
 	// Set our new IDs as a separate variable for comparisons.
-	$interest_ids   = explode( ',', sanitize_text_field( $_POST['interest_ids'] ) );
+	$interest_ids = explode( ',', sanitize_text_field( $_POST['interest_ids'] ) );
 
 	// Check to see if we are matching.
-	$compare_ids    = Helpers\compare_id_arrays( $original_ids, $interest_ids );
+	$compare_ids = Helpers\compare_id_arrays( $original_ids, $interest_ids );
 
 	// If we have a matching set, just return nothing.
 	if ( false !== $compare_ids ) {
@@ -139,7 +139,7 @@ function send_ajax_error_response( $errcode = '' ) {
 function send_ajax_success_response( $markup, $msgcode = 'success-change-interests' ) {
 
 	// Determine if we are empty.
-	$empty  = ! $markup ? Layout\get_customer_no_items() : false;
+	$empty = ! $markup ? Layout\get_customer_no_items() : false;
 
 	// Get my message text.
 	$msgtxt = Helpers\notice_text( $msgcode );

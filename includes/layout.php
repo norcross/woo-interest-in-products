@@ -29,13 +29,13 @@ function get_product_interest_checkout_field( $products = array(), $echo = false
 	}
 
 	// Set my label.
-	$label  = apply_filters( Core\HOOK_PREFIX . 'checkout_label', __( 'Keep me informed about my products.', 'woo-interest-in-products' ), $products );
+	$label = apply_filters( Core\HOOK_PREFIX . 'checkout_label', __( 'Keep me informed about my products.', 'woo-interest-in-products' ), $products );
 
 	// Set a string for my product IDs.
-	$ids    = implode( ',', $products );
+	$ids = implode( ',', $products );
 
 	// Set an empty.
-	$build  = '';
+	$build = '';
 
 	// Wrap the field in a paragraph.
 	$build .= '<p class="form-row woo-interest-in-products-field">';
@@ -83,10 +83,10 @@ function get_subscribed_customers_admin_list( $customers = array(), $echo = fals
 	}
 
 	// Grab my admin link and total count.
-	$alink  = Helpers\get_admin_menu_link();
+	$alink = Helpers\get_admin_menu_link();
 
 	// Set an empty.
-	$build  = '';
+	$build = '';
 
 	// Begin the table output.
 	$build .= '<table class="product-interest-admin-sidebar-table fixed">';
@@ -101,20 +101,20 @@ function get_subscribed_customers_admin_list( $customers = array(), $echo = fals
 		$ltitle = sprintf( __( 'Customer ID: %d', 'woo-interest-in-products' ), absint( $customer_data['ID'] ) );
 
 		// Get my formatted signup date.
-		$sdate  = Helpers\build_date_display( $customer_data['signup_date'], 'formatted' );
+		$sdate = Helpers\build_date_display( $customer_data['signup_date'], 'formatted' );
 
 		// And the output.
 		$build .= '<tr class="product-interest-admin-sidebar-list-item">';
 
 			// Handle the link.
-			$build .= '<td class="product-interest-name-column">';
+			$build     .= '<td class="product-interest-name-column">';
 				$build .= '<a title="' . esc_attr( $ltitle ) . '" href="' . esc_url( $customer_data['user_edit_link'] ) . '">' . esc_html( $customer_data['display_name'] ) . '</a>';
-			$build .= '</td>';
+			$build     .= '</td>';
 
 			// Include the signup date.
-			$build .= '<td class="product-interest-date-column">';
+			$build     .= '<td class="product-interest-date-column">';
 				$build .= '<span class="product-interest-admin-sidebar-signup-date">' . esc_html( $sdate ) . '</span>';
-			$build .= '</td>';
+			$build     .= '</td>';
 
 		// And close the list item.
 		$build .= '</tr>';
@@ -124,9 +124,9 @@ function get_subscribed_customers_admin_list( $customers = array(), $echo = fals
 	$build .= '</table>';
 
 	// Include our "view all" link.
-	$build .= '<p class="product-interest-admin-sidebar-link">';
+	$build     .= '<p class="product-interest-admin-sidebar-link">';
 		$build .= '<a title="' . esc_attr__( 'Click here to view all product interest signups', 'woo-interest-in-products' ) . '" href="' . esc_url( $alink ) . '">' . esc_html__( 'View all product interest signups', 'woo-interest-in-products' ) . '</a>';
-	$build .= '</p>';
+	$build     .= '</p>';
 
 	// And echo it out if requested.
 	if ( $echo ) {
@@ -145,16 +145,16 @@ function get_subscribed_customers_admin_list( $customers = array(), $echo = fals
 function get_subscribed_customers_admin_table_headers() {
 
 	// Set an empty.
-	$build  = '';
+	$build = '';
 
 	// Start the thead tag.
 	$build .= '<thead>';
 
 		// Set the single row.
-		$build .= '<tr>';
+		$build     .= '<tr>';
 			$build .= '<th class="product-interest-name-column">' . esc_html__( 'Name', 'woo-interest-in-products' ) . '</th>';
 			$build .= '<th class="product-interest-date-column">' . esc_html__( 'Signup', 'woo-interest-in-products' ) . '</th>';
-		$build .= '</tr>';
+		$build     .= '</tr>';
 
 	// Close the thead tag.
 	$build .= '</thead>';
@@ -183,7 +183,7 @@ function get_account_message_markup( $message = '', $type = 'error', $wrap = fal
 	$dslink = Helpers\get_account_tab_link();
 
 	// Set an empty.
-	$field  = '';
+	$field = '';
 
 	// Start the notice markup.
 	$field .= '<div class="woo-product-interest-account-notice woo-product-interest-account-notice-' . esc_attr( $type ) . '">';
@@ -192,15 +192,15 @@ function get_account_message_markup( $message = '', $type = 'error', $wrap = fal
 		$field .= '<p>' . wp_kses_post( $message ) . '</p>';
 
 		// And our dismissal button.
-		$field .= '<a class="woo-product-interest-account-notice-dismiss" href="' . esc_url( $dslink ) . '">';
+		$field     .= '<a class="woo-product-interest-account-notice-dismiss" href="' . esc_url( $dslink ) . '">';
 			$field .= screen_reader_text() . '<i class="dashicons dashicons-no"></i>';
-		$field .= '</a>';
+		$field     .= '</a>';
 
 	// And close the div.
 	$field .= '</div>';
 
 	// Add the optional wrapper.
-	$build  = ! $wrap ? $field : '<div class="woo-product-interest-account-notice-wrap">' . $field . '</div>';
+	$build = ! $wrap ? $field : '<div class="woo-product-interest-account-notice-wrap">' . $field . '</div>';
 
 	// Echo it if requested.
 	if ( ! empty( $echo ) ) {
@@ -221,12 +221,12 @@ function get_account_message_markup( $message = '', $type = 'error', $wrap = fal
 function get_customer_no_items( $echo = false ) {
 
 	// Set an empty.
-	$build  = '';
+	$build = '';
 
 	// Show the basic text.
-	$build .= '<div class="woo-interest-in-products-change-form-wrapper">';
+	$build     .= '<div class="woo-interest-in-products-change-form-wrapper">';
 		$build .= '<p>' . esc_html__( 'You have not signed up for any products.', 'woo-interest-in-products' ) . '</p>';
-	$build .= '</div>';
+	$build     .= '</div>';
 
 	// And echo it out if requested.
 	if ( $echo ) {
@@ -255,7 +255,7 @@ function get_single_customer_signups( $dataset = array(), $customer_id = 0, $ech
 
 	// If we have the ID without a dataset, attempt to get one.
 	if ( ! $dataset && $customer_id ) {
-		$dataset    = Queries\get_products_for_customer( absint( $customer_id ) );
+		$dataset = Queries\get_products_for_customer( absint( $customer_id ) );
 	}
 
 	// If we don't have products, just bail.
@@ -268,10 +268,10 @@ function get_single_customer_signups( $dataset = array(), $customer_id = 0, $ech
 	$relstr = implode( ',', $relids );
 
 	// Set my form page link.
-	$flink  = Helpers\get_account_tab_link();
+	$flink = Helpers\get_account_tab_link();
 
 	// Set an empty.
-	$build  = '';
+	$build = '';
 
 	// Set the entire thing in a div for targeting.
 	$build .= '<div class="woo-interest-in-products-change-form-wrapper">';
@@ -338,7 +338,7 @@ function customer_interest_list_items( $dataset = array(), $customer_id = 0, $ec
 
 	// If we have the ID without a dataset, attempt to get one.
 	if ( ! $dataset && $customer_id ) {
-		$dataset    = Queries\get_products_for_customer( absint( $customer_id ) );
+		$dataset = Queries\get_products_for_customer( absint( $customer_id ) );
 	}
 
 	// If we don't have products, just bail.
@@ -347,7 +347,7 @@ function customer_interest_list_items( $dataset = array(), $customer_id = 0, $ec
 	}
 
 	// Set an empty.
-	$build  = '';
+	$build = '';
 
 	// Begin the list output.
 	$build .= '<ul class="woo-interest-in-products-list-wrap">';
@@ -356,9 +356,9 @@ function customer_interest_list_items( $dataset = array(), $customer_id = 0, $ec
 	foreach ( $dataset as $index => $details ) {
 
 		// Grab a few variables.
-		$pslug  = get_post_field( 'post_name', absint( $details['product_id'] ) );
-		$pname  = get_the_title( absint( $details['product_id'] ) );
-		$sdate  = Helpers\build_date_display( $details['signup_date'], 'formatted' );
+		$pslug = get_post_field( 'post_name', absint( $details['product_id'] ) );
+		$pname = get_the_title( absint( $details['product_id'] ) );
+		$sdate = Helpers\build_date_display( $details['signup_date'], 'formatted' );
 
 		// Set some additional items.
 		$li_cls = 'woo-interest-in-products-list-item woo-interest-in-products-list-item-' . sanitize_html_class( $pslug );
@@ -380,9 +380,9 @@ function customer_interest_list_items( $dataset = array(), $customer_id = 0, $ec
 			$build .= '</label>';
 
 			// Include the signup date.
-			$build .= '<span class="woo-interest-in-products-signup-date">';
+			$build     .= '<span class="woo-interest-in-products-signup-date">';
 				$build .= '(' . sprintf( __( 'Signup Date: %s', 'woo-interest-in-products' ), esc_html( $sdate ) ) . ')';
-			$build .= '</span>';
+			$build     .= '</span>';
 
 		// And close the individual list item.
 		$build .= '</li>';

@@ -27,15 +27,17 @@ function get_all_products( $flush = false ) {
 	global $wpdb;
 
 	// Set up our query.
-	$setup  = $wpdb->prepare("
+	$setup = $wpdb->prepare(
+		"
 		SELECT   ID
 		FROM     $wpdb->posts
 		WHERE    post_type = '%s'
 		AND      post_status = '%s'
-	", esc_sql( 'product' ), esc_sql( 'publish' ) );
+	", esc_sql( 'product' ), esc_sql( 'publish' )
+	);
 
 	// Process the query.
-	$query  = $wpdb->get_col( $setup );
+	$query = $wpdb->get_col( $setup );
 
 	// If the query didn't work, handle it.
 	if ( ! $query ) {
@@ -49,7 +51,7 @@ function get_all_products( $flush = false ) {
 	}
 
 	// Make sure they're unique.
-	$items  = array_unique( $query );
+	$items = array_unique( $query );
 
 	// Return the array of product IDs, filtering out the duplicates.
 	return $items;
@@ -73,20 +75,22 @@ function get_enabled_products( $flush = false ) {
 	}
 
 	// Check the transient.
-	if ( false === $items = get_transient( $ky )  ) {
+	if ( false === $items = get_transient( $ky ) ) {
 
 		// Call the global database.
 		global $wpdb;
 
 		// Set up our query.
-		$setup  = $wpdb->prepare("
+		$setup = $wpdb->prepare(
+			"
 			SELECT   post_id
 			FROM     $wpdb->postmeta
 			WHERE    meta_key = '%s'
-		", esc_sql( Core\PROD_META_KEY ) );
+		", esc_sql( Core\PROD_META_KEY )
+		);
 
 		// Process the query.
-		$query  = $wpdb->get_col( $setup );
+		$query = $wpdb->get_col( $setup );
 
 		// If the query didn't work, handle it.
 		if ( ! $query ) {
@@ -100,7 +104,7 @@ function get_enabled_products( $flush = false ) {
 		}
 
 		// Make sure they're unique.
-		$items  = array_unique( $query );
+		$items = array_unique( $query );
 
 		// Set our transient with our data.
 		set_transient( $ky, $items, HOUR_IN_SECONDS );
@@ -129,23 +133,25 @@ function get_all_customers( $return = 'data', $flush = false ) {
 	}
 
 	// Check the transient.
-	if ( false === $customer_data = get_transient( $ky )  ) {
+	if ( false === $customer_data = get_transient( $ky ) ) {
 
 		// Call the global database.
 		global $wpdb;
 
 		// Set our various table names.
-		$table  = $wpdb->prefix . Core\TABLE_NAME;
+		$table = $wpdb->prefix . Core\TABLE_NAME;
 
 		// Set up our query.
-		$setup  = $wpdb->prepare("
+		$setup = $wpdb->prepare(
+			"
 			SELECT   *
 			FROM     $table
 			ORDER BY '%s' ASC
-		", esc_attr( 'signup_date' ) );
+		", esc_attr( 'signup_date' )
+		);
 
 		// Process the query.
-		$query  = $wpdb->get_results( $setup );
+		$query = $wpdb->get_results( $setup );
 
 		// If we came back empty, check for an error return.
 		if ( ! $query ) {
@@ -159,19 +165,19 @@ function get_all_customers( $return = 'data', $flush = false ) {
 		}
 
 		// Pull out the IDs and signup dates.
-		$customer_ids   = wp_list_pluck( $query, 'signup_date', 'customer_id' );
+		$customer_ids = wp_list_pluck( $query, 'signup_date', 'customer_id' );
 
 		// Set my empty array.
-		$customer_data  = array();
+		$customer_data = array();
 
 		// Now loop and set the data for each user.
 		foreach ( $customer_ids as $customer_id => $signup_date ) {
 
 			// Get our initial user object.
-			$user   = get_userdata( absint( $customer_id ) );
+			$user = get_userdata( absint( $customer_id ) );
 
 			// Set the user object as part of the array.
-			$setup  = (array) $user->data;
+			$setup = (array) $user->data;
 
 			// Include the user edit link and signup date.
 			$setup['user_edit_link'] = get_edit_user_link( $customer_id );
@@ -219,24 +225,26 @@ function get_customers_for_product( $product_id = 0, $return = 'data', $flush = 
 	}
 
 	// Check the transient.
-	if ( false === $customer_data = get_transient( $ky )  ) {
+	if ( false === $customer_data = get_transient( $ky ) ) {
 
 		// Call the global database.
 		global $wpdb;
 
 		// Set our various table names.
-		$table  = $wpdb->prefix . Core\TABLE_NAME;
+		$table = $wpdb->prefix . Core\TABLE_NAME;
 
 		// Set up our query.
-		$setup  = $wpdb->prepare("
+		$setup = $wpdb->prepare(
+			"
 			SELECT   *
 			FROM     $table
 			WHERE    product_id = '%d'
 			ORDER BY signup_date ASC
-		", absint( $product_id ) );
+		", absint( $product_id )
+		);
 
 		// Process the query.
-		$query  = $wpdb->get_results( $setup );
+		$query = $wpdb->get_results( $setup );
 
 		// If we came back empty, check for an error return.
 		if ( ! $query ) {
@@ -250,19 +258,19 @@ function get_customers_for_product( $product_id = 0, $return = 'data', $flush = 
 		}
 
 		// Pull out the IDs and signup dates.
-		$customer_ids   = wp_list_pluck( $query, 'signup_date', 'customer_id' );
+		$customer_ids = wp_list_pluck( $query, 'signup_date', 'customer_id' );
 
 		// Set my empty array.
-		$customer_data  = array();
+		$customer_data = array();
 
 		// Now loop and set the data for each user.
 		foreach ( $customer_ids as $customer_id => $signup_date ) {
 
 			// Get our initial user object.
-			$user   = get_userdata( absint( $customer_id ) );
+			$user = get_userdata( absint( $customer_id ) );
 
 			// Set the user object as part of the array.
-			$setup  = (array) $user->data;
+			$setup = (array) $user->data;
 
 			// Include the user edit link and signup date.
 			$setup['user_edit_link'] = get_edit_user_link( $customer_id );
@@ -305,24 +313,26 @@ function get_products_for_customer( $customer_id = 0, $column = false, $flush = 
 	}
 
 	// Check the transient.
-	if ( false === $products = get_transient( $ky )  ) {
+	if ( false === $products = get_transient( $ky ) ) {
 
 		// Call the global database.
 		global $wpdb;
 
 		// Set our various table names.
-		$table  = $wpdb->prefix . Core\TABLE_NAME;
+		$table = $wpdb->prefix . Core\TABLE_NAME;
 
 		// Set up our query.
-		$setup  = $wpdb->prepare("
+		$setup = $wpdb->prepare(
+			"
 			SELECT   *
 			FROM     $table
 			WHERE    customer_id = '%d'
 			ORDER BY signup_date ASC
-		", absint( $customer_id ) );
+		", absint( $customer_id )
+		);
 
 		// Process the query.
-		$query  = $wpdb->get_results( $setup, ARRAY_A );
+		$query = $wpdb->get_results( $setup, ARRAY_A );
 
 		// If we came back false, return the error.
 		if ( ! $query ) {
@@ -336,7 +346,7 @@ function get_products_for_customer( $customer_id = 0, $column = false, $flush = 
 		}
 
 		// Make sure they're unique.
-		$products   = Helpers\sanitize_text_recursive( $query );
+		$products = Helpers\sanitize_text_recursive( $query );
 
 		// Set our transient with our data.
 		set_transient( $ky, $products, HOUR_IN_SECONDS );
@@ -374,24 +384,26 @@ function get_data_by_relationship( $relationship_id = 0 ) {
 	}
 
 	// Check the transient.
-	if ( false === $relationship = get_transient( $ky )  ) {
+	if ( false === $relationship = get_transient( $ky ) ) {
 
 		// Call the global database.
 		global $wpdb;
 
 		// Set our various table names.
-		$table  = $wpdb->prefix . Core\TABLE_NAME;
+		$table = $wpdb->prefix . Core\TABLE_NAME;
 
 		// Set up our query.
-		$setup  = $wpdb->prepare("
+		$setup = $wpdb->prepare(
+			"
 			SELECT   *
 			FROM     $table
 			WHERE    relationship_id = '%d'
 			ORDER BY signup_date ASC
-		", absint( $relationship_id ) );
+		", absint( $relationship_id )
+		);
 
 		// Process the query.
-		$query  = $wpdb->get_row( $setup, ARRAY_A );
+		$query = $wpdb->get_row( $setup, ARRAY_A );
 
 		// If we came back false, return the error.
 		if ( ! $query ) {
@@ -405,24 +417,24 @@ function get_data_by_relationship( $relationship_id = 0 ) {
 		}
 
 		// Make sure they're unique and clean.
-		$clean  = Helpers\sanitize_text_recursive( $query );
+		$clean = Helpers\sanitize_text_recursive( $query );
 
 		// Get our initial user object.
-		$user   = get_userdata( absint( $clean['customer_id'] ) );
+		$user = get_userdata( absint( $clean['customer_id'] ) );
 
 		// Parse out the SKU.
-		$sku    = get_post_meta( absint( $clean['product_id'] ), '_sku', true );
+		$sku = get_post_meta( absint( $clean['product_id'] ), '_sku', true );
 
 		// Add the two IDs for easy array picking.
 		$relationship['customer_id'] = absint( $clean['customer_id'] );
 		$relationship['product_id']  = absint( $clean['product_id'] );
 
 		// Get the customer data, the user object.
-		$relationship['customer']    = (array) $user->data;
+		$relationship['customer'] = (array) $user->data;
 
 		// Get the product data, the WP_Post object.
-		$relationship['product']     = (array) get_post( absint( $clean['product_id'] ) );
-		$relationship['product']     = wp_parse_args( array( 'product_sku' => $sku ), $relationship['product'] );
+		$relationship['product'] = (array) get_post( absint( $clean['product_id'] ) );
+		$relationship['product'] = wp_parse_args( array( 'product_sku' => $sku ), $relationship['product'] );
 
 		// And add the signup date.
 		$relationship['signup_date'] = esc_attr( $clean['signup_date'] );
@@ -448,17 +460,19 @@ function get_all_subscription_data( $return = 'data' ) {
 	global $wpdb;
 
 	// Set our various table names.
-	$table  = $wpdb->prefix . Core\TABLE_NAME;
+	$table = $wpdb->prefix . Core\TABLE_NAME;
 
 	// Set up our query.
-	$setup  = $wpdb->prepare("
+	$setup = $wpdb->prepare(
+		"
 		SELECT   relationship_id
 		FROM     $table
 		ORDER BY '%s' ASC
-	", esc_attr( 'signup_date' ) );
+	", esc_attr( 'signup_date' )
+	);
 
 	// Process the query.
-	$query  = $wpdb->get_col( $setup );
+	$query = $wpdb->get_col( $setup );
 
 	// If we came back false, return the error.
 	if ( ! $query ) {
@@ -472,7 +486,7 @@ function get_all_subscription_data( $return = 'data' ) {
 	}
 
 	// Make sure all the relationship IDs are valid.
-	$relationship_ids   = array_map( 'absint', $query );
+	$relationship_ids = array_map( 'absint', $query );
 
 	// If we want the counts, return that.
 	if ( 'counts' === sanitize_text_field( $return ) ) {

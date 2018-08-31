@@ -30,7 +30,7 @@ class Commands extends WP_CLI_Command {
 	protected function get_command_args( $custom = array() ) {
 
 		// Set my base args.
-		$args   = array(
+		$args = array(
 			'return'     => true,   // Return 'STDOUT'; use 'all' for full object.
 			'parse'      => 'json', // Parse captured STDOUT to JSON array.
 			'launch'     => false,  // Reuse the current process.
@@ -64,12 +64,14 @@ class Commands extends WP_CLI_Command {
 	function enable_all_products( $args = array(), $assoc_args = array() ) {
 
 		// Parse out the associatives.
-		$parsed = wp_parse_args( $assoc_args, array(
-			'active'    => true,
-		));
+		$parsed = wp_parse_args(
+			$assoc_args, array(
+				'active' => true,
+			)
+		);
 
 		// Get my products.
-		$products   = WP_CLI::runcommand( 'post list --post_type=product --post_status=publish --field=ID --format=json', $this->get_command_args() );
+		$products = WP_CLI::runcommand( 'post list --post_type=product --post_status=publish --field=ID --format=json', $this->get_command_args() );
 
 		// Bail on empty or error.
 		if ( empty( $products ) || is_wp_error( $products ) ) {

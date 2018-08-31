@@ -37,10 +37,10 @@ function load_settings_assets( $hook ) {
 	$handle = 'woo-interest-in-products-admin';
 
 	// Set a file suffix structure based on whether or not we want a minified version.
-	$file   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? $handle : $handle . '.min';
+	$file = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? $handle : $handle . '.min';
 
 	// Set a version for whether or not we're debugging.
-	$vers   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : Core\VERS;
+	$vers = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : Core\VERS;
 
 	// Load our CSS file.
 	wp_enqueue_style( $handle, Core\ASSETS_URL . '/css/' . $file . '.css', false, $vers, 'all' );
@@ -94,7 +94,7 @@ function settings_page_view() {
 function interest_list_table() {
 
 	// Pull our list of enabled products.
-	$products   = Queries\get_enabled_products();
+	$products = Queries\get_enabled_products();
 
 	// Bail if we don't have any.
 	if ( empty( $products ) ) {
@@ -110,7 +110,7 @@ function interest_list_table() {
 	$action = Helpers\get_admin_menu_link();
 
 	// Call our table class.
-	$table  = new \ProductInterestSignups_Table();
+	$table = new \ProductInterestSignups_Table();
 
 	// And output the table.
 	$table->prepare_items();

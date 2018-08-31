@@ -43,10 +43,10 @@ function activation_prompt_notice() {
 	$msgtxt = __( 'Would you like to enable product interest signups on all your products now?', 'woo-interest-in-products' );
 
 	// Set my links.
-	$links  = '<a href="' . esc_url( $en_yes ) . '">' . __( 'Yes', 'woo-interest-in-products' ) . '</a> | <a href="' . esc_url( $en_no ) . '">' . __( 'No', 'woo-interest-in-products' ) . '</a>';
+	$links = '<a href="' . esc_url( $en_yes ) . '">' . __( 'Yes', 'woo-interest-in-products' ) . '</a> | <a href="' . esc_url( $en_no ) . '">' . __( 'No', 'woo-interest-in-products' ) . '</a>';
 
 	// Set an empty.
-	$field  = '';
+	$field = '';
 
 	// Start the notice markup.
 	$field .= '<div class="notice notice-info">';
@@ -76,17 +76,17 @@ function activation_prompt_results() {
 	// Handle my different action types.
 	switch ( sanitize_text_field( $_GET['prod-interest-enable-result'] ) ) {
 
-		case 'enabled' :
+		case 'enabled':
 			$msgtxt = __( 'All your current products have been enabled.', 'woo-interest-in-products' );
 			break;
 
-		case 'done' :
+		case 'done':
 			$msgtxt = __( 'Your selection has been recorded.', 'woo-interest-in-products' );
 			break;
 	}
 
 	// Set an empty.
-	$field  = '';
+	$field = '';
 
 	// Start the notice markup.
 	$field .= '<div class="notice notice-success is-dismissible">';
@@ -116,11 +116,11 @@ function activation_prompt_request() {
 	// Handle my different action types.
 	switch ( sanitize_text_field( $_GET['prod-interest-enable-all'] ) ) {
 
-		case 'yes' :
+		case 'yes':
 			activation_prompt_enable();
 			break;
 
-		case 'no' :
+		case 'no':
 			activation_prompt_dismiss();
 			break;
 	}
@@ -136,7 +136,7 @@ function activation_prompt_request() {
 function activation_prompt_redirect( $key = '' ) {
 
 	// Set my redirect link.
-	$redirect_link  = add_query_arg( array( 'prod-interest-enable-result' => sanitize_text_field( $key ) ), admin_url( '/' ) );
+	$redirect_link = add_query_arg( array( 'prod-interest-enable-result' => sanitize_text_field( $key ) ), admin_url( '/' ) );
 
 	// Do the redirect.
 	wp_safe_redirect( $redirect_link );
@@ -151,7 +151,7 @@ function activation_prompt_redirect( $key = '' ) {
 function activation_prompt_enable() {
 
 	// Get all my product IDs.
-	$products   = Queries\get_all_products();
+	$products = Queries\get_all_products();
 
 	// Loop my IDs and add the meta key.
 	foreach ( $products as $product_id ) {

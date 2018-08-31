@@ -18,7 +18,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\export_subscription_data', 1 );
 /**
  * Take the incoming relationship IDs and generate the export data.
  *
- * @param  array  $relationship_ids  The IDs requested via bulk.
+ * @param  array $relationship_ids  The IDs requested via bulk.
  *
  * @return mixed
  */
@@ -31,7 +31,12 @@ function export_subscription_data() {
 
 	// Fail on a missing or bad nonce.
 	if ( empty( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], 'wc_product_interest_export' ) ) {
-		Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'bad_nonce' ) );
+		Helpers\admin_page_redirect(
+			array(
+				'success' => 0,
+				'errcode' => 'bad_nonce',
+			)
+		);
 	}
 
 	// Fetch the dataset requested.
@@ -39,7 +44,12 @@ function export_subscription_data() {
 
 	// Fail on missing data.
 	if ( ! $stored ) {
-		Helpers\admin_page_redirect( array( 'success' => 0, 'errcode' => 'missing_stored_data' ) );
+		Helpers\admin_page_redirect(
+			array(
+				'success' => 0,
+				'errcode' => 'missing_stored_data',
+			)
+		);
 	}
 
 	// Add our headers and filename for direct download.
@@ -68,7 +78,7 @@ function export_subscription_data() {
 		}
 
 		// Set up our row data for the CSV.
-		$setup  = array(
+		$setup = array(
 			$single['customer']['display_name'],
 			$single['customer']['user_email'],
 			$single['product']['post_title'],
@@ -77,7 +87,7 @@ function export_subscription_data() {
 		);
 
 		// Allow each array to be filtered before etting added.
-		$setup  = apply_filters( Core\HOOK_PREFIX . 'export_data_row', $setup, $stored_id, $single );
+		$setup = apply_filters( Core\HOOK_PREFIX . 'export_data_row', $setup, $stored_id, $single );
 
 		// If this got bypassed somehow, skip.
 		if ( ! $setup || ! is_array( $setup ) ) {
@@ -100,10 +110,10 @@ function export_subscription_data() {
 function get_export_filename() {
 
 	// Get our sitename.
-	$sitename   = get_option( 'blogname' );
+	$sitename = get_option( 'blogname' );
 
 	// Append the timestamp and export name.
-	$filename   = strtolower( $sitename ) . '-wc-product-interest-export-' . time() . '.csv';
+	$filename = strtolower( $sitename ) . '-wc-product-interest-export-' . time() . '.csv';
 
 	// Return filtered and sanitized.
 	return apply_filters( Core\HOOK_PREFIX . 'export_filename', sanitize_file_name( $filename ) );
@@ -117,7 +127,7 @@ function get_export_filename() {
 function get_export_headers() {
 
 	// Build our array of header titles.
-	$setup  = array(
+	$setup = array(
 		__( 'Customer Name', 'woo-interest-in-products' ),
 		__( 'Customer Email', 'woo-interest-in-products' ),
 		__( 'Product Name', 'woo-interest-in-products' ),

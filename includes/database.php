@@ -45,7 +45,7 @@ function maybe_table_exists() {
 	global $wpdb;
 
 	// Set my table name.
-	$table  = $wpdb->wc_product_interest;
+	$table = $wpdb->wc_product_interest;
 
 	// Run the lookup.
 	$lookup = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) );
@@ -62,7 +62,7 @@ function maybe_table_exists() {
 function maybe_install_table() {
 
 	// Run the check.
-	$check  = maybe_table_exists();
+	$check = maybe_table_exists();
 
 	// If we don't have the table, run the install.
 	if ( ! $check ) {
@@ -97,19 +97,19 @@ function maybe_update_table() {
 function install_table() {
 
 	// Pull in the upgrade function.
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 	// Load the WPDB global.
 	global $wpdb;
 
 	// Pull our character set and collating.
-	$char_coll  = $wpdb->get_charset_collate();
+	$char_coll = $wpdb->get_charset_collate();
 
 	// Set our various table names.
 	$table_name = $wpdb->prefix . Core\TABLE_NAME;
 
 	// Write the SQL syntax.
-	$setup  = "
+	$setup = "
 		CREATE TABLE {$table_name} (
 			relationship_id bigint(20) NOT NULL AUTO_INCREMENT,
 			product_id bigint(20) NOT NULL,
@@ -168,7 +168,11 @@ function insert( $customer_id = 0, $products = array() ) {
 		}
 
 		// Set my insert data.
-		$insert = array( 'product_id' => $product_id, 'customer_id' => $customer_id, 'signup_date' => $signup );
+		$insert = array(
+			'product_id'  => $product_id,
+			'customer_id' => $customer_id,
+			'signup_date' => $signup,
+		);
 
 		// Filter our inserted data.
 		$insert = apply_filters( Core\HOOK_PREFIX . 'insert_data', $insert, $customer_id, $product_id );
